@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Escape the School – Interaktiver Escape Room</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(180deg, #020617, #0f172a);
+      color: #e5e7eb;
+      margin: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 1rem;
+    }
+    h1, h2 { color: #38bdf8; text-align: center; }
+    .card {
+      background: #020617;
+      border-radius: 20px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      border-radius: 12px;
+      border: none;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      margin-top: 0.7rem;
+      padding: 0.7rem;
+      border-radius: 12px;
+      border: none;
+      background: #38bdf8;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .hidden { display: none; }
+    .inventory {
+      position: sticky;
+      top: 0;
+      background: #020617;
+      border-radius: 16px;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+    }
+    .item {
+      display: inline-block;
+      background: #1e293b;
+      padding: 0.4rem 0.7rem;
+      border-radius: 10px;
+      margin-right: 0.4rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏫 Escape the School</h1>
+    <p style="text-align:center">Nach Schulschluss eingeschlossen – findet den Weg raus!</p>
+
+    <div class="inventory">
+      <strong>🎒 Inventar:</strong>
+      <div id="items"></div>
+    </div>
+
+    <div class="card" id="riddle1">
+      <h2>Rätsel 1: Stundenplan</h2>
+      <p>Deutsch 2. Stunde, Mathe 4., Englisch 6.</p>
+      <input id="code1" placeholder="Zahlencode" />
+      <button onclick="check1()">Prüfen</button>
+      <p id="msg1"></p>
+    </div>
+
+    <div class="card hidden" id="riddle2">
+      <h2>Rätsel 2: Zimmerplan</h2>
+      <p>Lehrerzimmer, Sekretariat, Computerraum</p>
+      <input id="code2" placeholder="Lösungswort" />
+      <button onclick="check2()">Prüfen</button>
+      <p id="msg2"></p>
+    </div>
+
+    <div class="card hidden" id="riddle3">
+      <h2>Rätsel 3: Schulregeln</h2>
+      <p>Pünktlichkeit – Ordnung – Respekt</p>
+      <input id="code3" placeholder="Passwort" />
+      <button onclick="check3()">Prüfen</button>
+      <p id="msg3"></p>
+    </div>
+
+    <div class="card hidden" id="finish">
+      <h2>🎉 Geschafft!</h2>
+      <p>Die Tür ist offen – ihr seid frei!</p>
+    </div>
+  </div>
+
+  <script>
+    const inventory = [];
+
+    function addItem(name) {
+      if (!inventory.includes(name)) {
+        inventory.push(name);
+        renderInventory();
+      }
+    }
+
+    function renderInventory() {
+      const el = document.getElementById('items');
+      el.innerHTML = '';
+      inventory.forEach(item => {
+        const span = document.createElement('span');
+        span.className = 'item';
+        span.innerText = item;
+        el.appendChild(span);
+      });
+    }
+
+    function check1() {
+      if (code1.value === '246') {
+        msg1.innerText = 'Richtig! Du hast einen Schlüssel gefunden.';
+        addItem('🔑 Schlüssel');
+        riddle2.classList.remove('hidden');
+      } else msg1.innerText = 'Falsch!';
+    }
+
+    function check2() {
+      if (code2.value.toLowerCase() === 'schluessel') {
+        msg2.innerText = 'Richtig! Ein Zettel mit Buchstaben.';
+        addItem('📄 Zettel (POR)');
+        riddle3.classList.remove('hidden');
+      } else msg2.innerText = 'Falsch!';
+    }
+
+    function check3() {
+      if (code3.value.toLowerCase() === 'por') {
+        msg3.innerText = 'Richtig!';
+        addItem('🚪 Ausgangscode');
+        finish.classList.remove('hidden');
+      } else msg3.innerText = 'Falsch!';
+    }
+  </script>
+</body>
+</html>
